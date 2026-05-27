@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import type { ArticleMeta } from "@/lib/articles";
 
@@ -8,9 +9,9 @@ interface FeaturedArticlesProps {
 
 export function FeaturedArticles({ featured, recent }: FeaturedArticlesProps) {
   const hero = featured[0] ?? recent[0];
-  const secondary = [...(featured.slice(1)), ...recent].filter(
-    (a) => a.frontmatter.slug !== hero?.frontmatter.slug
-  ).slice(0, 4);
+  const secondary = [...(featured.slice(1)), ...recent]
+    .filter((a) => a.frontmatter.slug !== hero?.frontmatter.slug)
+    .slice(0, 4);
 
   return (
     <section
@@ -18,22 +19,48 @@ export function FeaturedArticles({ featured, recent }: FeaturedArticlesProps) {
       style={{ maxWidth: "1280px" }}
       aria-labelledby="featured-heading"
     >
-      <div className="flex items-center gap-4 mb-10">
-        <h2
-          id="featured-heading"
-          className="text-2xl"
-          style={{ fontFamily: "var(--font-cinzel)", color: "var(--color-text-primary)" }}
-        >
-          Latest &amp; Featured
-        </h2>
-        <div className="flex-1 h-px" style={{ background: "var(--color-border)" }} />
-        <a
+      {/* Section header */}
+      <div className="flex items-center gap-6 mb-10">
+        <div>
+          <div
+            className="mb-1"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.38rem",
+              color: "var(--color-accent)",
+              letterSpacing: "0.2em",
+            }}
+          >
+            ▸ FRESH LOOT ◂
+          </div>
+          <h2
+            id="featured-heading"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "clamp(0.6rem, 1.8vw, 0.9rem)",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.6,
+            }}
+          >
+            LATEST &amp; FEATURED
+          </h2>
+        </div>
+
+        <div
+          className="flex-1"
+          style={{
+            height: "1px",
+            background: "repeating-linear-gradient(90deg, var(--color-border) 0px, var(--color-border) 4px, transparent 4px, transparent 8px)",
+          }}
+        />
+
+        <Link
           href="/blog"
-          className="text-sm transition-colors hover:text-[var(--color-accent)]"
-          style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
+          className="btn-pixel"
+          style={{ fontSize: "0.38rem", padding: "6px 12px" }}
         >
-          View all →
-        </a>
+          VIEW ALL ▸
+        </Link>
       </div>
 
       {hero && (

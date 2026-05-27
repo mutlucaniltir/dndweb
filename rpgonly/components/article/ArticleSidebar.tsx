@@ -8,31 +8,28 @@ interface ArticleSidebarProps {
 
 export function ArticleSidebar({ headings }: ArticleSidebarProps) {
   return (
-    <aside className="flex flex-col gap-8">
+    <aside className="flex flex-col gap-6">
       {/* Table of contents */}
-      <div
-        className="p-5 rounded-lg"
-        style={{
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-        }}
-      >
+      <div className="pixel-card p-5">
         <TableOfContents headings={headings} />
       </div>
 
       {/* Newsletter */}
       <div
-        className="p-5 rounded-lg"
+        className="p-5"
         style={{
-          backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-accent)",
+          backgroundColor: "rgba(0,201,167,0.04)",
+          position: "relative",
         }}
       >
+        {/* Corner brackets */}
+        <div style={{ position: "absolute", top: -1, left: -1, width: 10, height: 10, borderTop: "2px solid var(--color-accent)", borderLeft: "2px solid var(--color-accent)" }} />
+        <div style={{ position: "absolute", top: -1, right: -1, width: 10, height: 10, borderTop: "2px solid var(--color-accent)", borderRight: "2px solid var(--color-accent)" }} />
+        <div style={{ position: "absolute", bottom: -1, left: -1, width: 10, height: 10, borderBottom: "2px solid var(--color-accent)", borderLeft: "2px solid var(--color-accent)" }} />
+        <div style={{ position: "absolute", bottom: -1, right: -1, width: 10, height: 10, borderBottom: "2px solid var(--color-accent)", borderRight: "2px solid var(--color-accent)" }} />
         <NewsletterSignup variant="inline" />
       </div>
-
-      {/* TODO: Ezoic/Mediavine sidebar ad slot */}
-      {/* <div id="ezoic-pub-ad-placeholder-sidebar" /> */}
     </aside>
   );
 }

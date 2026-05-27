@@ -29,17 +29,35 @@ export function Footer() {
     <footer
       style={{
         backgroundColor: "var(--color-surface)",
-        borderTop: "1px solid var(--color-border)",
+        borderTop: "2px solid var(--color-border)",
       }}
     >
+      {/* Top pixel stripe */}
+      <div
+        style={{
+          height: "2px",
+          background: "repeating-linear-gradient(90deg, var(--color-accent) 0px, var(--color-accent) 4px, transparent 4px, transparent 8px)",
+          opacity: 0.4,
+        }}
+      />
+
       {/* Newsletter strip */}
-      <div className="border-b px-6 py-8" style={{ borderColor: "var(--color-border)" }}>
+      <div
+        className="px-6 py-10"
+        style={{ borderBottom: "1px solid var(--color-border)" }}
+      >
         <div className="mx-auto" style={{ maxWidth: "1280px" }}>
           <NewsletterSignup variant="inline" />
         </div>
       </div>
 
-      <hr className="gold-divider" style={{ margin: "0" }} />
+      {/* Pixel divider */}
+      <div
+        style={{
+          height: "1px",
+          background: "repeating-linear-gradient(90deg, var(--color-border) 0px, var(--color-border) 4px, transparent 4px, transparent 8px)",
+        }}
+      />
 
       {/* Main columns */}
       <div
@@ -48,43 +66,73 @@ export function Footer() {
       >
         {/* Brand */}
         <div className="md:col-span-1">
-          <Link
-            href="/"
-            className="text-2xl tracking-widest uppercase mb-4 block"
-            style={{ fontFamily: "var(--font-cinzel)" }}
-          >
-            <span style={{ color: "var(--color-text-primary)" }}>RPG</span>
-            <span style={{ color: "var(--color-accent)" }}> ONLY</span>
+          <Link href="/" className="flex flex-col leading-none gap-1 mb-5">
+            <span style={{ fontFamily: "var(--font-press-start)", fontSize: "0.75rem" }}>
+              <span style={{ color: "var(--color-red)" }}>RPG</span>
+              <span style={{ color: "var(--color-text-primary)" }}>ONLY</span>
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-press-start)",
+                fontSize: "0.32rem",
+                color: "var(--color-text-secondary)",
+                letterSpacing: "0.12em",
+              }}
+            >
+              © {new Date().getFullYear()} — GAME OVER? NEVER.
+            </span>
           </Link>
           <p
-            className="text-sm leading-relaxed"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
-          >
-            Your world. Your quest. Your rules.
-          </p>
-          <p
-            className="text-xs mt-3"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "0.95rem",
+              color: "var(--color-text-secondary)",
+              lineHeight: 1.6,
+              maxWidth: "260px",
+            }}
           >
             The definitive RPG resource hub for tabletop adventurers and digital dungeon crawlers.
           </p>
+          {/* Social pixel icons placeholder */}
+          <div className="flex gap-3 mt-5">
+            {["▶ TWITTER", "▶ DISCORD"].map((s) => (
+              <span
+                key={s}
+                style={{
+                  fontFamily: "var(--font-press-start)",
+                  fontSize: "0.3rem",
+                  color: "var(--color-text-secondary)",
+                  padding: "4px 8px",
+                  border: "1px solid var(--color-border)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Navigation */}
         <div>
           <h3
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
+            className="mb-5"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.42rem",
+              color: "var(--color-accent)",
+              letterSpacing: "0.15em",
+            }}
           >
-            Navigation
+            ▸ NAVIGATION
           </h3>
-          <ul className="flex flex-col gap-2 list-none">
+          <ul className="flex flex-col gap-3 list-none">
             {NAV_COL.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-sm nav-link transition-colors"
-                  style={{ fontFamily: "var(--font-jetbrains)" }}
+                  className="nav-link"
+                  style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem" }}
                 >
                   {l.label}
                 </Link>
@@ -96,18 +144,23 @@ export function Footer() {
         {/* Categories + Legal */}
         <div>
           <h3
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
+            className="mb-5"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.42rem",
+              color: "var(--color-accent)",
+              letterSpacing: "0.15em",
+            }}
           >
-            Categories
+            ▸ CATEGORIES
           </h3>
-          <ul className="flex flex-col gap-2 mb-8 list-none">
+          <ul className="flex flex-col gap-3 mb-8 list-none">
             {CATEGORY_COL.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-sm nav-link transition-colors"
-                  style={{ fontFamily: "var(--font-jetbrains)" }}
+                  className="nav-link"
+                  style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem" }}
                 >
                   {l.label}
                 </Link>
@@ -116,18 +169,23 @@ export function Footer() {
           </ul>
 
           <h3
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
+            className="mb-5"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.42rem",
+              color: "var(--color-text-secondary)",
+              letterSpacing: "0.15em",
+            }}
           >
-            Legal
+            ▸ LEGAL
           </h3>
-          <ul className="flex flex-col gap-2 list-none">
+          <ul className="flex flex-col gap-3 list-none">
             {LEGAL_COL.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-sm nav-link transition-colors"
-                  style={{ fontFamily: "var(--font-jetbrains)" }}
+                  className="nav-link"
+                  style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem" }}
                 >
                   {l.label}
                 </Link>
@@ -138,22 +196,44 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t px-6 py-5" style={{ borderColor: "var(--color-border)" }}>
+      <div
+        style={{
+          borderTop: "1px solid var(--color-border)",
+          background: "repeating-linear-gradient(90deg, var(--color-border) 0px, var(--color-border) 2px, transparent 2px, transparent 6px)",
+          backgroundSize: "8px 1px",
+          backgroundRepeat: "repeat-x",
+          backgroundPosition: "top",
+        }}
+      >
         <div
-          className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-2"
+          className="mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
           style={{ maxWidth: "1280px" }}
         >
           <p
-            className="text-xs"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.3rem",
+              color: "var(--color-text-secondary)",
+              letterSpacing: "0.1em",
+            }}
           >
-            © {new Date().getFullYear()} RPGOnly.com — All affiliate links support the site.{" "}
+            AFFILIATE LINKS SUPPORT THIS SITE —{" "}
             <Link
               href="/affiliate-disclosure"
-              className="underline hover-gold-text transition-colors"
+              style={{ color: "var(--color-accent)", textDecoration: "underline" }}
             >
-              Disclosure
+              DISCLOSURE
             </Link>
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.3rem",
+              color: "var(--color-text-secondary)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            INSERT COIN TO CONTINUE ▸
           </p>
         </div>
       </div>

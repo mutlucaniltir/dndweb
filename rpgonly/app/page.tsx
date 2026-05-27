@@ -18,33 +18,13 @@ export default function HomePage() {
       <section
         className="py-20 px-6"
         style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(201,168,76,0.04) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse at center, rgba(0,201,167,0.04) 0%, transparent 70%)",
+          borderTop: "1px solid var(--color-border)",
         }}
         aria-labelledby="newsletter-heading"
       >
-        <div className="mx-auto text-center" style={{ maxWidth: "600px" }}>
-          <p
-            className="text-xs uppercase tracking-[0.3em] mb-4"
-            style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
-          >
-            Stay Updated
-          </p>
-          <h2
-            id="newsletter-heading"
-            className="text-3xl mb-4"
-            style={{ fontFamily: "var(--font-cinzel)" }}
-          >
-            The RPG Dispatch
-          </h2>
-          <p
-            className="mb-8 text-lg"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-crimson)" }}
-          >
-            Weekly loot for adventurers — new guides, exclusive deals, and RPG news
-            delivered to your inbox every week.
-          </p>
-          <NewsletterSignup variant="inline" />
+        <div className="mx-auto" style={{ maxWidth: "600px" }}>
+          <NewsletterSignup variant="page" />
         </div>
       </section>
     </>

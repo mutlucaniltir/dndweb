@@ -19,7 +19,7 @@ export function NewsletterSignup({ variant = "inline" }: NewsletterSignupProps) 
     const parsed = emailSchema.safeParse(email);
     if (!parsed.success) {
       setStatus("error");
-      setMessage("Please enter a valid email address.");
+      setMessage("INVALID EMAIL ADDRESS.");
       return;
     }
 
@@ -33,27 +33,47 @@ export function NewsletterSignup({ variant = "inline" }: NewsletterSignupProps) 
       const data = (await res.json()) as { success: boolean; message?: string; error?: string };
       if (data.success) {
         setStatus("success");
-        setMessage(data.message ?? "Subscribed!");
+        setMessage(data.message ?? "SUBSCRIBED!");
         setEmail("");
       } else {
         setStatus("error");
-        setMessage(data.error ?? "Something went wrong.");
+        setMessage(data.error ?? "SOMETHING WENT WRONG.");
       }
     } catch {
       setStatus("error");
-      setMessage("Network error. Please try again.");
+      setMessage("NETWORK ERROR. TRY AGAIN.");
     }
   }
 
   if (status === "success") {
     return (
-      <div
-        className="flex flex-col items-center gap-3 py-6 text-center"
-        style={{ color: "var(--color-accent)" }}
-      >
-        <span className="text-4xl">✦</span>
-        <p className="font-[family-name:var(--font-cinzel)] text-lg">Check your inbox, adventurer!</p>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+      <div className="flex flex-col items-center gap-4 py-6 text-center">
+        <div
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "1.5rem",
+            color: "var(--color-accent)",
+          }}
+        >
+          ✦
+        </div>
+        <p
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.55rem",
+            color: "var(--color-accent)",
+            letterSpacing: "0.1em",
+          }}
+        >
+          QUEST ACCEPTED!
+        </p>
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "0.95rem",
+            color: "var(--color-text-secondary)",
+          }}
+        >
           {message}
         </p>
       </div>
@@ -66,22 +86,54 @@ export function NewsletterSignup({ variant = "inline" }: NewsletterSignupProps) 
     <div className={isPage ? "text-center" : ""}>
       {isPage ? (
         <>
-          <h2
-            className="text-2xl mb-2"
-            style={{ fontFamily: "var(--font-cinzel)", color: "var(--color-accent)" }}
+          <div
+            className="inline-block mb-3 px-3 py-1"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.4rem",
+              color: "var(--color-accent)",
+              border: "1px solid var(--color-border)",
+              letterSpacing: "0.2em",
+            }}
           >
-            The RPG Dispatch
+            ▸ FREE SUBSCRIPTION ◂
+          </div>
+          <h2
+            className="mb-3"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "clamp(0.7rem, 2vw, 1rem)",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.6,
+            }}
+          >
+            THE RPG DISPATCH
           </h2>
-          <p className="mb-6" style={{ color: "var(--color-text-secondary)" }}>
+          <p
+            className="mb-6 mx-auto"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "1.1rem",
+              color: "var(--color-text-secondary)",
+              maxWidth: "480px",
+              lineHeight: 1.6,
+            }}
+          >
             Weekly loot for adventurers — guides, deals, and new releases delivered to your inbox.
           </p>
         </>
       ) : (
         <p
-          className="text-sm font-[family-name:var(--font-cinzel)] mb-3"
-          style={{ color: "var(--color-accent)" }}
+          className="mb-4"
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.48rem",
+            color: "var(--color-accent)",
+            letterSpacing: "0.08em",
+            lineHeight: 1.8,
+          }}
         >
-          The RPG Dispatch — Weekly loot for adventurers
+          ▸ THE RPG DISPATCH — WEEKLY LOOT FOR ADVENTURERS
         </p>
       )}
 
@@ -90,14 +142,16 @@ export function NewsletterSignup({ variant = "inline" }: NewsletterSignupProps) 
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
+          placeholder="ENTER@EMAIL.COM"
           required
-          className="flex-1 px-4 py-2.5 rounded text-sm outline-none"
+          className="flex-1 px-4 py-2.5 outline-none"
           style={{
-            backgroundColor: "var(--color-muted)",
+            backgroundColor: "var(--color-bg)",
             border: "1px solid var(--color-border)",
             color: "var(--color-text-primary)",
-            fontFamily: "var(--font-jetbrains)",
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.42rem",
+            letterSpacing: "0.05em",
           }}
           onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
           onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
@@ -105,25 +159,24 @@ export function NewsletterSignup({ variant = "inline" }: NewsletterSignupProps) 
         <button
           type="submit"
           disabled={status === "loading"}
-          className="px-5 py-2.5 rounded text-sm font-[family-name:var(--font-cinzel)] transition-all disabled:opacity-50"
-          style={{
-            backgroundColor: "var(--color-accent)",
-            color: "var(--color-bg)",
-          }}
-          onMouseOver={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "var(--color-accent-hover)")
-          }
-          onMouseOut={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "var(--color-accent)")
-          }
+          className="btn-pixel-solid disabled:opacity-50"
+          style={{ whiteSpace: "nowrap" }}
         >
-          {status === "loading" ? "..." : "Subscribe"}
+          {status === "loading" ? "..." : "▶ JOIN"}
         </button>
       </form>
 
       {status === "error" && (
-        <p className="mt-2 text-xs" style={{ color: "var(--color-red)" }}>
-          {message}
+        <p
+          className="mt-2"
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.38rem",
+            color: "var(--color-red)",
+            letterSpacing: "0.05em",
+          }}
+        >
+          ✕ {message}
         </p>
       )}
     </div>

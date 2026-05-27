@@ -12,7 +12,7 @@ interface ArticleHeaderProps {
 export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) {
   return (
     <header>
-      {/* Hero image */}
+      {/* Hero image with scanline overlay */}
       <div className="relative w-full overflow-hidden" style={{ height: "480px" }}>
         <Image
           src={frontmatter.featuredImage}
@@ -25,8 +25,14 @@ export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) 
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(to bottom, rgba(13,13,15,0.3) 0%, rgba(13,13,15,0) 40%, rgba(13,13,15,0.95) 100%)",
+            background: "linear-gradient(to bottom, rgba(7,7,15,0.2) 0%, rgba(7,7,15,0) 40%, rgba(7,7,15,0.97) 100%)",
+          }}
+        />
+        {/* Scanlines */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)",
           }}
         />
       </div>
@@ -37,18 +43,23 @@ export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) 
           <div className="flex items-center gap-3 mb-4 mt-8">
             <Link
               href="/blog"
-              className="text-xs uppercase tracking-wider nav-link transition-colors"
-              style={{ fontFamily: "var(--font-jetbrains)" }}
+              className="nav-link"
+              style={{ fontFamily: "var(--font-press-start)", fontSize: "0.38rem" }}
             >
-              Blog
+              BLOG
             </Link>
-            <span style={{ color: "var(--color-border)" }}>/</span>
+            <span style={{ color: "var(--color-accent)", fontFamily: "var(--font-press-start)", fontSize: "0.38rem" }}>▸</span>
             <Badge label={frontmatter.category} isCategory />
           </div>
 
           <h1
-            className="text-3xl md:text-4xl lg:text-5xl mb-5"
-            style={{ fontFamily: "var(--font-cinzel)", lineHeight: 1.15 }}
+            className="mb-5"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "clamp(0.75rem, 2.5vw, 1.1rem)",
+              lineHeight: 2,
+              color: "var(--color-text-primary)",
+            }}
           >
             {frontmatter.title}
           </h1>
@@ -57,7 +68,7 @@ export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) 
             className="text-lg mb-6"
             style={{
               color: "var(--color-text-secondary)",
-              fontFamily: "var(--font-crimson)",
+              fontFamily: "var(--font-body)",
               lineHeight: 1.6,
             }}
           >
@@ -67,23 +78,25 @@ export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) 
           <div
             className="flex flex-wrap items-center gap-4 pb-6"
             style={{
-              fontFamily: "var(--font-jetbrains)",
-              fontSize: "0.8rem",
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.38rem",
               color: "var(--color-text-secondary)",
               borderBottom: "1px solid var(--color-border)",
+              letterSpacing: "0.05em",
+              lineHeight: 2,
             }}
           >
-            <span>By {frontmatter.author}</span>
-            <span>·</span>
-            <span>{formatDate(frontmatter.publishedAt)}</span>
+            <span>BY {frontmatter.author.toUpperCase()}</span>
+            <span style={{ color: "var(--color-accent)" }}>▸</span>
+            <span>{formatDate(frontmatter.publishedAt).toUpperCase()}</span>
             {frontmatter.updatedAt !== frontmatter.publishedAt && (
               <>
-                <span>·</span>
-                <span>Updated {formatDate(frontmatter.updatedAt)}</span>
+                <span style={{ color: "var(--color-accent)" }}>▸</span>
+                <span>UPDATED {formatDate(frontmatter.updatedAt).toUpperCase()}</span>
               </>
             )}
-            <span>·</span>
-            <span>{readingTime}</span>
+            <span style={{ color: "var(--color-accent)" }}>▸</span>
+            <span>{readingTime.toUpperCase()}</span>
           </div>
 
           {frontmatter.tags.length > 0 && (
@@ -98,24 +111,39 @@ export function ArticleHeader({ frontmatter, readingTime }: ArticleHeaderProps) 
 
           {frontmatter.affiliateDisclosure && (
             <div
-              className="mt-6 px-4 py-3 rounded text-sm"
+              className="mt-6 px-4 py-3"
               style={{
-                backgroundColor: "var(--color-muted)",
-                border: "1px solid var(--color-border)",
-                color: "var(--color-text-secondary)",
-                fontFamily: "var(--font-jetbrains)",
+                backgroundColor: "rgba(0,201,167,0.05)",
+                border: "1px solid var(--color-accent)",
+                borderLeft: "3px solid var(--color-accent)",
               }}
             >
-              ✦{" "}
-              <strong style={{ color: "var(--color-accent)" }}>Affiliate Disclosure:</strong>{" "}
-              Some links in this article are affiliate links. We may earn a commission at no extra
-              cost to you.{" "}
-              <Link
-                href="/affiliate-disclosure"
-                className="underline hover-gold-text transition-colors"
+              <span
+                style={{
+                  fontFamily: "var(--font-press-start)",
+                  fontSize: "0.38rem",
+                  color: "var(--color-accent)",
+                  letterSpacing: "0.1em",
+                }}
               >
-                Learn more
-              </Link>
+                ✦ AFFILIATE DISCLOSURE:
+              </span>{" "}
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.9rem",
+                  color: "var(--color-text-secondary)",
+                }}
+              >
+                Some links in this article are affiliate links. We may earn a commission at no extra
+                cost to you.{" "}
+                <Link
+                  href="/affiliate-disclosure"
+                  style={{ color: "var(--color-accent)", textDecoration: "underline" }}
+                >
+                  Learn more
+                </Link>
+              </span>
             </div>
           )}
         </div>

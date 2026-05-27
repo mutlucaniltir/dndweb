@@ -2,14 +2,11 @@ import type { ReactNode } from "react";
 
 type CalloutType = "info" | "tip" | "warning" | "lore";
 
-const configs: Record<
-  CalloutType,
-  { icon: string; accent: string; bg: string }
-> = {
-  info: { icon: "ℹ", accent: "#4c8bc9", bg: "rgba(76,139,201,0.08)" },
-  tip: { icon: "✦", accent: "#c9a84c", bg: "rgba(201,168,76,0.08)" },
-  warning: { icon: "⚠", accent: "#b94040", bg: "rgba(185,64,64,0.08)" },
-  lore: { icon: "📜", accent: "#9b4cc9", bg: "rgba(155,76,201,0.08)" },
+const configs: Record<CalloutType, { icon: string; label: string; accent: string }> = {
+  info:    { icon: "ℹ", label: "INFO",    accent: "#4c8bc9" },
+  tip:     { icon: "✦", label: "TIP",     accent: "#00c9a7" },
+  warning: { icon: "⚠", label: "WARNING", accent: "#e63946" },
+  lore:    { icon: "📜", label: "LORE",   accent: "#9b5de5" },
 };
 
 interface CalloutProps {
@@ -19,28 +16,35 @@ interface CalloutProps {
 }
 
 export function Callout({ type = "tip", title, children }: CalloutProps) {
-  const { icon, accent, bg } = configs[type];
+  const { icon, label, accent } = configs[type];
   return (
     <div
-      className="my-6 p-5 rounded-lg"
+      className="my-6 p-5"
       style={{
-        backgroundColor: bg,
+        backgroundColor: `${accent}0d`,
         border: `1px solid ${accent}40`,
         borderLeft: `3px solid ${accent}`,
       }}
     >
       <div
-        className="flex items-center gap-2 mb-2"
-        style={{ color: accent, fontFamily: "var(--font-cinzel)", fontSize: "0.875rem" }}
+        className="flex items-center gap-2 mb-3"
+        style={{ color: accent }}
       >
-        <span aria-hidden="true">{icon}</span>
-        {title && <span className="font-semibold">{title}</span>}
+        <span
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.5rem",
+            letterSpacing: "0.15em",
+          }}
+        >
+          [{icon} {title ?? label}]
+        </span>
       </div>
       <div
         style={{
-          color: "var(--color-text-secondary)",
-          fontFamily: "var(--font-crimson)",
+          fontFamily: "var(--font-body)",
           fontSize: "1rem",
+          color: "var(--color-text-secondary)",
           lineHeight: 1.7,
         }}
       >

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import Fuse from "fuse.js";
+import type { SearchItem } from "@/lib/fuse";
 
 const NAV_LINKS = [
   { href: "/blog", label: "Blog" },
@@ -17,21 +19,23 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [credits, setCredits] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const t = setInterval(() => setCredits((c) => (c + 1) % 100), 3000);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearInterval(t);
+    };
   }, []);
 
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setMenuOpen(false);
-        setSearchOpen(false);
-      }
-    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setMenuOpen(false); setSearchOpen(false); }
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
@@ -39,185 +43,102 @@ export function Navbar() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-200"
         style={{
-          backgroundColor: scrolled
-            ? "rgba(13, 13, 15, 0.85)"
-            : "rgba(13, 13, 15, 0.6)",
-          backdropFilter: "blur(12px)",
-          borderBottom: scrolled
-            ? "1px solid var(--color-border)"
-            : "1px solid transparent",
+          backgroundColor: scrolled ? "rgba(7,7,15,0.97)" : "rgba(7,7,15,0.85)",
+          backdropFilter: "blur(8px)",
+          borderBottom: scrolled ? "2px solid var(--color-border)" : "2px solid transparent",
         }}
       >
+        {/* Pixel accent top stripe */}
+        <div
+          className="w-full"
+          style={{
+            height: "2px",
+            background: "repeating-linear-gradient(90deg, var(--color-accent) 0px, var(--color-accent) 4px, transparent 4px, transparent 8px)",
+          }}
+        />
+
         <nav
-          className="mx-auto flex items-center justify-between px-6 py-4"
+          className="mx-auto flex items-center justify-between px-6 py-3"
           style={{ maxWidth: "1280px" }}
           aria-label="Main navigation"
         >
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex-shrink-0 text-xl tracking-widest uppercase"
-            style={{ fontFamily: "var(--font-cinzel)" }}
-          >
-            <span style={{ color: "var(--color-text-primary)" }}>RPG</span>
-            <span style={{ color: "var(--color-accent)" }}> ONLY</span>
+          <Link href="/" className="flex flex-col leading-none gap-1">
+            <span style={{ fontFamily: "var(--font-press-start)", fontSize: "0.75rem" }}>
+              <span style={{ color: "var(--color-red)" }}>RPG</span>
+              <span style={{ color: "var(--color-text-primary)" }}>ONLY</span>
+            </span>
+            <span style={{ fontFamily: "var(--font-press-start)", fontSize: "0.32rem", color: "var(--color-text-secondary)", letterSpacing: "0.15em" }}>
+              INSERT COIN — CREDITS: {String(credits).padStart(2, "0")}
+            </span>
           </Link>
 
           {/* Desktop Nav */}
           <ul className="hidden md:flex items-center gap-8 list-none">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="text-sm uppercase tracking-widest transition-colors hover:text-[var(--color-accent)]"
-                  style={{
-                    fontFamily: "var(--font-jetbrains)",
-                    color: "var(--color-text-secondary)",
-                  }}
-                >
-                  {link.label}
-                </Link>
+                <Link href={link.href} className="nav-link">{link.label}</Link>
               </li>
             ))}
           </ul>
 
           {/* Right Controls */}
           <div className="flex items-center gap-3">
-            {/* Search */}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"
-              className="p-2 rounded transition-colors hover:text-[var(--color-accent)]"
+              className="p-2 transition-colors"
               style={{ color: "var(--color-text-secondary)" }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "var(--color-text-secondary)")}
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
             </button>
 
-            {/* Theme toggle */}
             {mounted && (
               <button
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                aria-label={
-                  theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-                }
-                className="p-2 rounded transition-colors hover:text-[var(--color-accent)]"
-                style={{ color: "var(--color-text-secondary)" }}
+                aria-label={theme === "dark" ? "Light mode" : "Dark mode"}
+                className="p-2 transition-colors"
+                style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-press-start)", fontSize: "0.55rem" }}
+                onMouseOver={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+                onMouseOut={(e) => (e.currentTarget.style.color = "var(--color-text-secondary)")}
               >
-                {theme === "dark" ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                  </svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                  </svg>
-                )}
+                {theme === "dark" ? "☀" : "☾"}
               </button>
             )}
 
-            {/* Newsletter CTA */}
-            <Link
-              href="/newsletter"
-              className="hidden md:flex items-center px-4 py-2 rounded text-sm uppercase tracking-wider transition-all"
-              style={{
-                fontFamily: "var(--font-cinzel)",
-                border: "1px solid var(--color-accent)",
-                color: "var(--color-accent)",
-              }}
-              onMouseOver={(e) => {
-                const el = e.currentTarget;
-                el.style.backgroundColor = "var(--color-accent)";
-                el.style.color = "var(--color-bg)";
-              }}
-              onMouseOut={(e) => {
-                const el = e.currentTarget;
-                el.style.backgroundColor = "transparent";
-                el.style.color = "var(--color-accent)";
-              }}
-            >
-              Newsletter
+            <Link href="/newsletter" className="hidden md:flex btn-pixel-solid" style={{ fontSize: "0.5rem", padding: "8px 14px" }}>
+              ▶ SUBSCRIBE
             </Link>
 
-            {/* Mobile hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle mobile menu"
+              aria-label="Toggle menu"
               aria-expanded={menuOpen}
-              className="md:hidden p-2 rounded"
-              style={{ color: "var(--color-text-secondary)" }}
+              className="md:hidden p-2"
+              style={{ color: "var(--color-accent)", fontFamily: "var(--font-press-start)", fontSize: "0.65rem" }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                {menuOpen ? (
-                  <>
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </>
-                ) : (
-                  <>
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </>
-                )}
-              </svg>
+              {menuOpen ? "✕" : "≡"}
             </button>
           </div>
         </nav>
 
-        {/* Mobile menu */}
         {menuOpen && (
-          <div
-            className="md:hidden py-4 px-6 border-t"
-            style={{
-              borderColor: "var(--color-border)",
-              backgroundColor: "rgba(13, 13, 15, 0.97)",
-            }}
-          >
-            <ul className="flex flex-col gap-4 list-none">
+          <div className="md:hidden py-4 px-6 border-t" style={{ borderColor: "var(--color-border)", backgroundColor: "rgba(7,7,15,0.99)" }}>
+            <ul className="flex flex-col gap-5 list-none">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="block text-sm uppercase tracking-widest transition-colors hover:text-[var(--color-accent)]"
-                    style={{
-                      fontFamily: "var(--font-jetbrains)",
-                      color: "var(--color-text-secondary)",
-                    }}
-                  >
-                    {link.label}
-                  </Link>
+                  <Link href={link.href} onClick={() => setMenuOpen(false)} className="nav-link">▸ {link.label}</Link>
                 </li>
               ))}
               <li>
-                <Link
-                  href="/newsletter"
-                  onClick={() => setMenuOpen(false)}
-                  className="block text-sm"
-                  style={{ color: "var(--color-accent)", fontFamily: "var(--font-cinzel)" }}
-                >
-                  Newsletter →
+                <Link href="/newsletter" onClick={() => setMenuOpen(false)} className="nav-link" style={{ color: "var(--color-accent)" }}>
+                  ▸ SUBSCRIBE FREE
                 </Link>
               </li>
             </ul>
@@ -225,26 +146,20 @@ export function Navbar() {
         )}
       </header>
 
-      {/* Search modal rendered at layout level */}
-      {searchOpen && (
-        <SearchModal onClose={() => setSearchOpen(false)} />
-      )}
+      {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
     </>
   );
 }
 
-/* ─── Inline Search Modal ─────────────────────────────────────────────── */
-import { useEffect as useEff, useRef, useState as useSt } from "react";
-import type { SearchItem } from "@/lib/fuse";
-
+/* ─── Search Modal ────────────────────────────────────────────────────── */
 function SearchModal({ onClose }: { onClose: () => void }) {
-  const [query, usQ] = useSt("");
-  const [results, setResults] = useSt<SearchItem[]>([]);
-  const [allItems, setAllItems] = useSt<SearchItem[]>([]);
-  const [activeIdx, setActiveIdx] = useSt(0);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchItem[]>([]);
+  const [allItems, setAllItems] = useState<SearchItem[]>([]);
+  const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEff(() => {
+  useEffect(() => {
     inputRef.current?.focus();
     fetch("/api/search-index")
       .then((r) => r.json())
@@ -252,128 +167,72 @@ function SearchModal({ onClose }: { onClose: () => void }) {
       .catch(() => {});
   }, []);
 
-  useEff(() => {
-    if (!query.trim()) {
-      setResults([]);
-      setActiveIdx(0);
-      return;
-    }
-    import("fuse.js").then(({ default: Fuse }) => {
-      const fuse = new Fuse(allItems, {
-        keys: ["title", "excerpt", "tags", "category"],
-        threshold: 0.35,
-      });
-      setResults(fuse.search(query).map((r) => r.item).slice(0, 8));
-      setActiveIdx(0);
-    });
+  useEffect(() => {
+    if (!query.trim()) { setResults([]); setActiveIdx(0); return; }
+    const fuse = new Fuse(allItems, { keys: ["title", "excerpt", "tags"], threshold: 0.35 });
+    setResults(fuse.search(query).map((r) => r.item).slice(0, 8));
+    setActiveIdx(0);
   }, [query, allItems]);
 
   function handleKey(e: React.KeyboardEvent) {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIdx((i) => Math.min(i + 1, results.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIdx((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter" && results[activeIdx]) {
-      window.location.href = `/blog/${results[activeIdx].slug}`;
-    } else if (e.key === "Escape") {
-      onClose();
-    }
+    if (e.key === "ArrowDown") { e.preventDefault(); setActiveIdx((i) => Math.min(i + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActiveIdx((i) => Math.max(i - 1, 0)); }
+    else if (e.key === "Enter" && results[activeIdx]) { window.location.href = `/blog/${results[activeIdx].slug}`; }
+    else if (e.key === "Escape") { onClose(); }
   }
 
   return (
     <div
       className="fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4"
-      style={{ backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+      style={{ backgroundColor: "rgba(0,0,0,0.92)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div
-        className="w-full rounded-lg overflow-hidden"
-        style={{
-          maxWidth: "640px",
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-        }}
-      >
-        <div
-          className="flex items-center gap-3 px-5 py-4 border-b"
-          style={{ borderColor: "var(--color-border)" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" aria-hidden="true">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
+      <div className="w-full pixel-card" style={{ maxWidth: "600px" }}>
+        <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: "var(--color-border)" }}>
+          <span style={{ color: "var(--color-accent)", fontFamily: "var(--font-press-start)", fontSize: "0.55rem" }}>▸</span>
           <input
             ref={inputRef}
             type="search"
             value={query}
-            onChange={(e) => usQ(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKey}
-            placeholder="Search articles, guides, reviews..."
-            className="flex-1 bg-transparent outline-none text-base"
-            style={{
-              color: "var(--color-text-primary)",
-              fontFamily: "var(--font-crimson)",
-            }}
+            placeholder="SEARCH THE COMPENDIUM..."
+            className="flex-1 bg-transparent outline-none"
+            style={{ color: "var(--color-text-primary)", fontFamily: "var(--font-body)", fontSize: "1.2rem" }}
             aria-label="Search articles"
           />
-          <kbd
-            className="px-2 py-0.5 rounded text-xs"
-            style={{
-              backgroundColor: "var(--color-muted)",
-              color: "var(--color-text-secondary)",
-              fontFamily: "var(--font-jetbrains)",
-            }}
-          >
-            ESC
-          </kbd>
+          <button onClick={onClose} style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-press-start)", fontSize: "0.45rem" }}>
+            [ESC]
+          </button>
         </div>
 
         {results.length > 0 && (
-          <ul className="max-h-96 overflow-y-auto list-none" role="listbox">
+          <ul className="max-h-80 overflow-y-auto list-none">
             {results.map((item, i) => (
-              <li key={item.slug} role="option" aria-selected={i === activeIdx}>
+              <li key={item.slug}>
                 <a
                   href={`/blog/${item.slug}`}
-                  className="flex flex-col px-5 py-3 transition-colors"
+                  className="flex flex-col px-4 py-3 transition-colors"
                   style={{
-                    backgroundColor:
-                      i === activeIdx ? "var(--color-muted)" : "transparent",
+                    backgroundColor: i === activeIdx ? "var(--color-surface-2)" : "transparent",
                     borderBottom: "1px solid var(--color-border)",
                   }}
                   onClick={onClose}
                 >
-                  <span
-                    className="font-medium text-sm"
-                    style={{
-                      fontFamily: "var(--font-cinzel)",
-                      color: "var(--color-text-primary)",
-                    }}
-                  >
+                  <span style={{ fontFamily: "var(--font-press-start)", fontSize: "0.5rem", color: i === activeIdx ? "var(--color-accent)" : "var(--color-text-primary)" }}>
                     {item.title}
                   </span>
-                  <span
-                    className="text-xs mt-0.5"
-                    style={{
-                      fontFamily: "var(--font-jetbrains)",
-                      color: "var(--color-text-secondary)",
-                    }}
-                  >
-                    {item.category}
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "var(--color-text-secondary)", marginTop: "2px" }}>
+                    {item.category.toUpperCase()}
                   </span>
                 </a>
               </li>
             ))}
           </ul>
         )}
-
         {query && results.length === 0 && (
-          <p
-            className="px-5 py-8 text-center text-sm"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
-          >
-            No results for &ldquo;{query}&rdquo;
+          <p className="px-4 py-8 text-center" style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-press-start)", fontSize: "0.5rem" }}>
+            NO RESULTS FOR &ldquo;{query}&rdquo;
           </p>
         )}
       </div>

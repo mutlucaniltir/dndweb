@@ -21,21 +21,34 @@ export function AffiliateBanner() {
   return (
     <div
       role="banner"
-      className="relative z-50 w-full py-2 px-4 text-center text-sm"
+      className="relative z-50 w-full py-1.5 px-4 text-center"
       style={{
         backgroundColor: "var(--color-surface)",
         borderBottom: "1px solid var(--color-border)",
-        color: "var(--color-text-secondary)",
-        fontFamily: "var(--font-jetbrains)",
       }}
     >
-      <span>{DISCLOSURE_TEXT}</span>
+      <span
+        style={{
+          fontFamily: "var(--font-press-start)",
+          fontSize: "0.32rem",
+          color: "var(--color-text-secondary)",
+          letterSpacing: "0.08em",
+        }}
+      >
+        ▸ {DISCLOSURE_TEXT}
+      </span>
       <button
         onClick={dismiss}
         aria-label="Dismiss affiliate disclosure banner"
-        className="ml-3 text-xs underline hover:text-[var(--color-accent)] transition-colors"
+        className="ml-4"
+        style={{
+          fontFamily: "var(--font-press-start)",
+          fontSize: "0.32rem",
+          color: "var(--color-accent)",
+          letterSpacing: "0.08em",
+        }}
       >
-        Dismiss
+        [DISMISS]
       </button>
     </div>
   );

@@ -22,13 +22,7 @@ export function AffiliateProductCard({
   description,
 }: AffiliateProductCardProps) {
   return (
-    <div
-      className="my-6 rounded-xl overflow-hidden"
-      style={{
-        backgroundColor: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
-      }}
-    >
+    <div className="pixel-card my-6 overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -58,27 +52,37 @@ export function AffiliateProductCard({
             className="object-cover"
             sizes="144px"
           />
+          {/* Scanline overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px)",
+            }}
+          />
         </div>
 
         {/* Info */}
         <div className="flex flex-col justify-between p-5 flex-1">
           <div>
-            <div className="flex items-start justify-between gap-4 mb-2">
+            <div className="flex items-start justify-between gap-4 mb-3">
               <h3
-                className="text-base font-medium"
                 style={{
-                  fontFamily: "var(--font-cinzel)",
+                  fontFamily: "var(--font-press-start)",
+                  fontSize: "0.5rem",
                   color: "var(--color-text-primary)",
+                  lineHeight: 1.9,
                 }}
               >
                 {name}
               </h3>
               <span
-                className="text-xs px-2 py-0.5 rounded flex-shrink-0"
+                className="flex-shrink-0 px-2 py-0.5"
                 style={{
-                  backgroundColor: "var(--color-muted)",
-                  color: "var(--color-text-secondary)",
-                  fontFamily: "var(--font-jetbrains)",
+                  fontFamily: "var(--font-press-start)",
+                  fontSize: "0.35rem",
+                  color: "var(--color-accent)",
+                  border: "1px solid var(--color-accent)",
+                  letterSpacing: "0.1em",
                 }}
               >
                 {STORE_LABELS[store]}
@@ -86,25 +90,24 @@ export function AffiliateProductCard({
             </div>
 
             {rating && (
-              <div className="flex items-center gap-1 mb-2">
+              <div className="flex items-center gap-1 mb-3">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
                     style={{
-                      color:
-                        i < Math.round(rating)
-                          ? "var(--color-accent)"
-                          : "var(--color-muted)",
+                      color: i < Math.round(rating) ? "var(--color-gold)" : "var(--color-border)",
+                      fontSize: "0.85rem",
                     }}
                   >
                     ★
                   </span>
                 ))}
                 <span
-                  className="text-xs ml-1"
+                  className="ml-1"
                   style={{
+                    fontFamily: "var(--font-press-start)",
+                    fontSize: "0.35rem",
                     color: "var(--color-text-secondary)",
-                    fontFamily: "var(--font-jetbrains)",
                   }}
                 >
                   {rating.toFixed(1)}
@@ -113,11 +116,12 @@ export function AffiliateProductCard({
             )}
 
             <p
-              className="text-sm mb-4"
+              className="mb-4"
               style={{
-                color: "var(--color-text-secondary)",
-                fontFamily: "var(--font-crimson)",
+                fontFamily: "var(--font-body)",
                 fontSize: "0.95rem",
+                color: "var(--color-text-secondary)",
+                lineHeight: 1.6,
               }}
             >
               {description}
@@ -127,8 +131,11 @@ export function AffiliateProductCard({
           <div className="flex items-center gap-4">
             {price && (
               <span
-                className="text-xl font-semibold"
-                style={{ color: "var(--color-accent)", fontFamily: "var(--font-cinzel)" }}
+                style={{
+                  fontFamily: "var(--font-press-start)",
+                  fontSize: "0.65rem",
+                  color: "var(--color-accent)",
+                }}
               >
                 {price}
               </span>
@@ -137,29 +144,17 @@ export function AffiliateProductCard({
               href={affiliateUrl}
               target="_blank"
               rel="noopener noreferrer nofollow"
-              className="px-5 py-2 rounded text-sm font-medium btn-primary"
-              style={{ fontFamily: "var(--font-cinzel)" }}
+              className="btn-pixel-solid"
+              style={{ fontSize: "0.38rem" }}
             >
-              View on {STORE_LABELS[store]} ↗
+              ▶ VIEW ON {STORE_LABELS[store].toUpperCase()}
             </a>
-            {/* Affiliate disclosure tooltip */}
             <span
               className="relative group text-xs cursor-help"
               style={{ color: "var(--color-text-secondary)" }}
               title="Affiliate link — we may earn a commission at no extra cost to you"
             >
               *
-              <span
-                className="absolute bottom-5 left-0 w-52 p-2 rounded text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10"
-                style={{
-                  backgroundColor: "var(--color-surface)",
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-text-secondary)",
-                  fontFamily: "var(--font-jetbrains)",
-                }}
-              >
-                Affiliate link — we may earn a commission at no extra cost to you
-              </span>
             </span>
           </div>
         </div>

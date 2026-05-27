@@ -1,24 +1,23 @@
 import type { Metadata } from "next";
-import { Cinzel, Crimson_Pro, JetBrains_Mono } from "next/font/google";
+import { Press_Start_2P, VT323, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AffiliateBanner } from "@/components/ui/AffiliateBanner";
 
-const cinzel = Cinzel({
+const pressStart2P = Press_Start_2P({
   subsets: ["latin"],
-  variable: "--font-cinzel",
+  variable: "--font-press-start",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: "400",
 });
 
-const crimsonPro = Crimson_Pro({
+const vt323 = VT323({
   subsets: ["latin"],
-  variable: "--font-crimson",
+  variable: "--font-vt323",
   display: "swap",
-  weight: ["400", "600"],
-  style: ["normal", "italic"],
+  weight: "400",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -38,17 +37,7 @@ export const metadata: Metadata = {
   },
   description:
     "The definitive resource hub for tabletop and video game RPG fans. Guides, reviews, tools, and deals for D&D, Pathfinder, Baldur's Gate 3, Elden Ring, and more.",
-  keywords: [
-    "RPG",
-    "tabletop RPG",
-    "D&D",
-    "Dungeons and Dragons",
-    "Pathfinder",
-    "Baldur's Gate 3",
-    "video game RPG",
-    "RPG reviews",
-    "RPG guides",
-  ],
+  keywords: ["RPG", "tabletop RPG", "D&D", "Dungeons and Dragons", "Pathfinder", "Baldur's Gate 3", "video game RPG"],
   authors: [{ name: "RPGOnly" }],
   creator: "RPGOnly",
   openGraph: {
@@ -57,54 +46,34 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "RPGOnly",
     title: "RPGOnly — Your World. Your Quest. Your Rules.",
-    description:
-      "The definitive resource hub for tabletop and video game RPG fans.",
-    images: [
-      {
-        url: "/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "RPGOnly — The RPG Resource Hub",
-      },
-    ],
+    description: "The definitive resource hub for tabletop and video game RPG fans.",
+    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "RPGOnly" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "RPGOnly — Your World. Your Quest. Your Rules.",
-    description:
-      "The definitive resource hub for tabletop and video game RPG fans.",
+    description: "The definitive resource hub for tabletop and video game RPG fans.",
     images: ["/og-default.jpg"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${cinzel.variable} ${crimsonPro.variable} ${jetbrainsMono.variable}`}
+      className={`${pressStart2P.variable} ${vt323.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        {/* TODO: Google Analytics 4 — replace GA_MEASUREMENT_ID */}
+        {/* TODO: Google Analytics 4 */}
         {/* <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID" /> */}
-        {/* <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=...` }} /> */}
       </head>
-      <body className="min-h-screen flex flex-col antialiased">
+      <body className="min-h-screen flex flex-col">
         <ThemeProvider>
           <AffiliateBanner />
           <Navbar />

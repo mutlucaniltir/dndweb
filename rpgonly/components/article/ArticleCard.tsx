@@ -16,27 +16,41 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
     return (
       <Link
         href={`/blog/${frontmatter.slug}`}
-        className="flex gap-4 group p-3 rounded-lg transition-all hover-gold-border"
+        className="flex gap-4 group p-3 transition-all"
+        style={{
+          border: "1px solid var(--color-border)",
+          backgroundColor: "var(--color-surface)",
+          textDecoration: "none",
+        }}
       >
-        <div className="relative w-20 h-20 flex-shrink-0 rounded overflow-hidden">
+        <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
           <Image
             src={frontmatter.featuredImage}
             alt={frontmatter.featuredImageAlt}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover"
             sizes="80px"
           />
         </div>
         <div className="flex flex-col justify-between min-w-0">
           <h3
-            className="text-sm font-medium leading-snug line-clamp-2 hover-gold-text group-hover:text-[var(--color-accent)] transition-colors"
-            style={{ fontFamily: "var(--font-cinzel)" }}
+            className="line-clamp-2"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.42rem",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.9,
+            }}
           >
             {frontmatter.title}
           </h3>
           <span
-            className="text-xs mt-1"
-            style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains)" }}
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "0.8rem",
+              color: "var(--color-text-secondary)",
+              marginTop: "4px",
+            }}
           >
             {formatDate(frontmatter.publishedAt)}
           </span>
@@ -49,8 +63,8 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
     return (
       <Link
         href={`/blog/${frontmatter.slug}`}
-        className="group flex flex-col md:flex-row gap-0 rounded-xl overflow-hidden transition-all duration-300 hover-gold-border"
-        style={{ backgroundColor: "var(--color-surface)" }}
+        className="group pixel-card flex flex-col md:flex-row gap-0 overflow-hidden transition-all"
+        style={{ textDecoration: "none" }}
       >
         <div className="relative w-full md:w-1/2 aspect-video overflow-hidden">
           <Image
@@ -61,42 +75,60 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
           />
+          {/* Pixel scanline overlay */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              background:
-                "linear-gradient(to right, transparent 60%, var(--color-surface))",
+              background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
             }}
           />
         </div>
         <div className="flex flex-col justify-center p-8 md:w-1/2">
           <Badge label={frontmatter.category} isCategory className="mb-3 self-start" />
           <h2
-            className="text-2xl md:text-3xl mb-3 hover-gold-text group-hover:text-[var(--color-accent)] transition-colors"
-            style={{ fontFamily: "var(--font-cinzel)" }}
+            className="mb-3"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "clamp(0.6rem, 1.5vw, 0.85rem)",
+              color: "var(--color-text-primary)",
+              lineHeight: 2,
+            }}
           >
             {frontmatter.title}
           </h2>
           <p
             className="mb-5 line-clamp-3"
             style={{
-              color: "var(--color-text-secondary)",
-              fontFamily: "var(--font-crimson)",
+              fontFamily: "var(--font-body)",
               fontSize: "1.05rem",
+              color: "var(--color-text-secondary)",
+              lineHeight: 1.6,
             }}
           >
             {frontmatter.seoDescription}
           </p>
           <div
-            className="flex items-center gap-3 text-xs"
+            className="flex items-center gap-3"
             style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "0.85rem",
               color: "var(--color-text-secondary)",
-              fontFamily: "var(--font-jetbrains)",
             }}
           >
             <span>{formatDate(frontmatter.publishedAt)}</span>
-            <span>·</span>
+            <span style={{ color: "var(--color-accent)" }}>▸</span>
             <span>{readingTime}</span>
+          </div>
+          <div
+            className="mt-4"
+            style={{
+              fontFamily: "var(--font-press-start)",
+              fontSize: "0.4rem",
+              color: "var(--color-accent)",
+              letterSpacing: "0.1em",
+            }}
+          >
+            ▸ READ ARTICLE
           </div>
         </div>
       </Link>
@@ -107,8 +139,8 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
   return (
     <Link
       href={`/blog/${frontmatter.slug}`}
-      className="group flex flex-col rounded-xl overflow-hidden transition-all duration-300 hover-gold-border"
-      style={{ backgroundColor: "var(--color-surface)" }}
+      className="pixel-card group flex flex-col overflow-hidden transition-all"
+      style={{ textDecoration: "none" }}
     >
       <div className="relative aspect-video overflow-hidden">
         <Image
@@ -118,35 +150,49 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
+        {/* Scanline overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)",
+          }}
+        />
       </div>
       <div className="flex flex-col flex-1 p-5">
         <Badge label={frontmatter.category} isCategory className="mb-3 self-start" />
         <h2
-          className="text-lg mb-2 hover-gold-text group-hover:text-[var(--color-accent)] transition-colors line-clamp-2"
-          style={{ fontFamily: "var(--font-cinzel)" }}
+          className="mb-3 line-clamp-2"
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.48rem",
+            color: "var(--color-text-primary)",
+            lineHeight: 2,
+          }}
         >
           {frontmatter.title}
         </h2>
         <p
-          className="text-sm mb-4 flex-1 line-clamp-3"
+          className="mb-4 flex-1 line-clamp-3"
           style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "0.95rem",
             color: "var(--color-text-secondary)",
-            fontFamily: "var(--font-crimson)",
-            fontSize: "1rem",
+            lineHeight: 1.6,
           }}
         >
           {frontmatter.seoDescription}
         </p>
         <div
-          className="flex items-center gap-3 text-xs pt-3"
+          className="flex items-center gap-3 pt-3"
           style={{
-            color: "var(--color-text-secondary)",
-            fontFamily: "var(--font-jetbrains)",
             borderTop: "1px solid var(--color-border)",
+            fontFamily: "var(--font-body)",
+            fontSize: "0.8rem",
+            color: "var(--color-text-secondary)",
           }}
         >
           <span>{formatDate(frontmatter.publishedAt)}</span>
-          <span>·</span>
+          <span style={{ color: "var(--color-accent)" }}>▸</span>
           <span>{readingTime}</span>
         </div>
       </div>

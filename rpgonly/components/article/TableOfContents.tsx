@@ -38,27 +38,40 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   return (
     <nav aria-label="Table of contents">
       <h3
-        className="text-xs uppercase tracking-widest mb-4"
-        style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
+        className="mb-4"
+        style={{
+          fontFamily: "var(--font-press-start)",
+          fontSize: "0.42rem",
+          color: "var(--color-accent)",
+          letterSpacing: "0.15em",
+        }}
       >
-        Contents
+        ▸ CONTENTS
       </h3>
       <ol className="list-none flex flex-col gap-1">
         {headings.map(({ id, text, level }) => (
           <li key={id} style={{ paddingLeft: level === 3 ? "1rem" : "0" }}>
             <a
               href={`#${id}`}
-              className="block py-1 text-sm transition-colors"
+              className="block py-1.5 transition-colors"
               style={{
-                fontFamily: "var(--font-jetbrains)",
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9rem",
                 color: active === id ? "var(--color-accent)" : "var(--color-text-secondary)",
                 borderLeft: active === id
                   ? "2px solid var(--color-accent)"
                   : "2px solid transparent",
                 paddingLeft: "0.75rem",
-                fontSize: "0.8rem",
+                lineHeight: 1.4,
               }}
             >
+              {active === id && (
+                <span
+                  style={{ color: "var(--color-accent)", marginRight: "4px", fontFamily: "var(--font-press-start)", fontSize: "0.3rem" }}
+                >
+                  ▸
+                </span>
+              )}
               {text}
             </a>
           </li>
