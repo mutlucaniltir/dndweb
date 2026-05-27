@@ -11,28 +11,45 @@ export default function ToolsPage() {
   return (
     <div className="pt-24 pb-20 px-6 mx-auto" style={{ maxWidth: "1280px" }}>
       <header className="mb-12 text-center">
-        <p
-          className="text-xs uppercase tracking-[0.3em] mb-3"
-          style={{ color: "var(--color-accent)", fontFamily: "var(--font-jetbrains)" }}
+        <div
+          className="inline-block mb-4 px-3 py-1"
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "0.38rem",
+            color: "var(--color-accent)",
+            border: "1px solid var(--color-border)",
+            letterSpacing: "0.2em",
+          }}
         >
-          Adventurer&apos;s Toolkit
-        </p>
+          ▸ ADVENTURER&apos;S TOOLKIT ◂
+        </div>
         <h1
-          className="text-4xl md:text-5xl mb-4"
-          style={{ fontFamily: "var(--font-cinzel)" }}
+          className="mb-4"
+          style={{
+            fontFamily: "var(--font-press-start)",
+            fontSize: "clamp(0.8rem, 3vw, 1.2rem)",
+            color: "var(--color-text-primary)",
+            lineHeight: 1.6,
+          }}
         >
-          Free RPG Tools
+          FREE RPG TOOLS
         </h1>
         <p
           className="text-lg max-w-xl mx-auto"
-          style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-crimson)" }}
+          style={{ color: "var(--color-text-secondary)", fontFamily: "var(--font-body)" }}
         >
-          Everything you need at the table — or behind the screen. Roll dice,
-          generate characters, and plan your encounters.
+          Everything you need at the table — roll dice, generate characters, and plan encounters.
         </p>
       </header>
 
-      <hr className="gold-divider" />
+      {/* Pixel divider */}
+      <div
+        className="mb-10"
+        style={{
+          height: "1px",
+          background: "repeating-linear-gradient(90deg, var(--color-border) 0px, var(--color-border) 4px, transparent 4px, transparent 8px)",
+        }}
+      />
 
       <ToolsGrid />
     </div>
