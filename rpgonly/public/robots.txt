@@ -1,0 +1,17 @@
+# *
+User-agent: *
+Allow: /
+
+# GPTBot
+User-agent: GPTBot
+Disallow: /
+
+# ChatGPT-User
+User-agent: ChatGPT-User
+Disallow: /
+
+# Host
+Host: https://rpgonly.com
+
+# Sitemaps
+Sitemap: https://rpgonly.com/sitemap.xml
